@@ -8,13 +8,15 @@ function Player.new(self, x, y)
 
     self.x = x
     self.y = y
+    self.width = self.img:getWidth()
+    self.height = self.img:getHeight()
 
     self.speed = 200
-  
-    self.originX = self.img:getWidth() / 2
-    self.originY = self.img:getHeight() / 2
 
-    self.collider = HC.rectangle(self.x, self.y, self.img:getWidth(), self.img:getHeight())
+    self.originX = self.width / 2
+    self.originY = self.height / 2
+
+    self.collider = HC.rectangle(self.x, self.y, self.width, self.height)
 end
 
 function Player.update(self, dt)
@@ -24,7 +26,7 @@ function Player.update(self, dt)
         self.y = self.y - (self.speed * dt)
     end
 
-    self.collider:moveTo(self.x + self.img:getWidth() / 2, self.y + self.img:getHeight() / 2)
+    self.collider:moveTo(self.x + self.width / 2, self.y + self.height / 2)
 end
 
 function Player.draw(self)

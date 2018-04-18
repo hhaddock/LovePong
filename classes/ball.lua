@@ -8,13 +8,13 @@ function Ball.new(self)
 
     self.speed = 200
     self.angle = math.rad(-180)
-  
+
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
 
     self.x = love.graphics.getWidth() / 2
     self.y = love.graphics.getHeight() / 2
-    
+
     self.originX = self.x
     self.originY = self.y
 
@@ -41,17 +41,26 @@ function Ball.draw(self)
     self.collider:draw('line')
 end
 
-function Ball.handleCollisions(self, player)
-    if self.y < 0 or self.y + self.height > love.graphics:getHeight() then
-        self.angle = self.angle * -1
-    elseif self.x < player.x + player.img:getWidth() and self.y + self.height > player.y and self.y < player.y + player.img:getHeight() then
-        self.angle = self.angle * 0.5
+function Ball.handleWallCollisions(self)
+    self.angle = self.angle * -1
+end
+
+function Ball.reset(self)
+  self.x = self.originX
+  self.y = self.originY
+  self.speedX = 0
+  self.speedY = 0
+  self.collider = HC.circle(self.x + self.width / 2, self.y + self.height / 2, self.width/2)
+end
+
+function Ball.handlePaddleCollisions(self, paddle)
+  if self.x < love.graphics:getWidth() / 2 and self.speedX < 0 then
+    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x < paddle.x + paddle.width then
+      self.angle = self.angle * 0.25
     end
-    -- if wall == 'left' then
-    --     self.speedX = self.speedX * -1
-    --     self.speedY = self.speedY * -1
-    -- else
-    --     self.speedX = self.speedX * 1
-    --     self.speedY = self.speedY * 1
-    -- end
+  elseif self.x > love.graphics:getWidth() / 2 and self.speedX > 0 then
+    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x > paddle.x then
+      self.angle = self.angle * 0.25
+    end
+  end
 end
