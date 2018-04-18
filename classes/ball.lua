@@ -7,7 +7,7 @@ function Ball.new(self)
     self.img = love.graphics.newImage('assets/Ball.png')
 
     self.speed = 200
-    self.angle = math.rad(-180)
+    self.angle = math.rad(-135)
 
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
@@ -56,11 +56,19 @@ end
 function Ball.handlePaddleCollisions(self, paddle)
   if self.x < love.graphics:getWidth() / 2 and self.speedX < 0 then
     if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x < paddle.x + paddle.width then
-      self.angle = self.angle * 0.25
+      if self.speedY < 0 then
+        self.angle = self.angle / -3
+      else
+        self.angle = self.angle / 3
+      end
     end
   elseif self.x > love.graphics:getWidth() / 2 and self.speedX > 0 then
-    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x > paddle.x then
-      self.angle = self.angle * 0.25
+    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x + self.width > paddle.x and self.x < paddle.x then
+      if self.speedY < 0 then
+        self.angle = self.angle / 3
+      else
+        self.angle = self.angle / -3
+      end
     end
   end
 end
