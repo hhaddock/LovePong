@@ -34,10 +34,9 @@ function Game.update(self, dt)
   --Update the position of player and ball
   self.player.update(self.player, dt)
 
-  self.enemy.update(self.enemy, dt)
-  self.enemy.followBall(self.enemy, dt, self.ball.y)
-
   if not self.paused then
+    self.enemy.update(self.enemy, dt)
+    self.enemy.followBall(self.enemy, dt, self.ball.y)
     self.ball.update(self.ball, dt)
     self.handleBallWorldCollisions(self)
     self.ball.handlePaddleCollisions(self.ball, self.player)
@@ -97,6 +96,7 @@ function Game.handleBallWorldCollisions(self)
   for shape, delta in pairs(HC.collisions(self.ball.collider)) do
     if self.ball.collider:collidesWith(self.worldBounds.left) then
       self.ball.reset(self.ball)
+      self.enemy.reset(self.enemy)
       self.playerScore = self.playerScore + 1
       self.paused = true
     elseif self.ball.collider:collidesWith(self.worldBounds.right) then

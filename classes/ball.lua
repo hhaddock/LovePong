@@ -58,17 +58,17 @@ function Ball.handlePaddleCollisions(self, paddle)
   if self.x < love.graphics:getWidth() / 2 and self.speedX < 0 then
     if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x + self.width > paddle.x and self.x < paddle.x + paddle.width then
       if self.speedY < 0 then
-        self.angle = self.angle / -4
+        self.angle = self.angle / -3
       else
-        self.angle = self.angle / 4
+        self.angle = self.angle / 3
       end
     end
   elseif self.x > love.graphics:getWidth() / 2 and self.speedX > 0 then
     if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x + self.width > paddle.x and self.x < paddle.x then
       if self.speedY < 0 then
-        self.angle = self.angle * 4
+        self.angle = self.angle * 3
       else
-        self.angle = self.angle * -4
+        self.angle = self.angle * -3
       end
     end
   end
