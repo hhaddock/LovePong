@@ -13,8 +13,8 @@ function Player.new(self, x, y)
 
     self.speed = 200
 
-    self.originX = self.width / 2
-    self.originY = self.height / 2
+    self.originX = self.x
+    self.originY = self.y
 
     self.collider = HC.rectangle(self.x, self.y, self.width, self.height)
 end
@@ -32,4 +32,10 @@ end
 function Player.draw(self)
     love.graphics.draw(self.img, self.x, self.y)
     self.collider:draw('line')
+end
+
+function Player.reset(self)
+    self.x = self.originX
+    self.y = self.originY
+    self.collider = HC.rectangle(self.x, self.y, self.width, self.height)
 end

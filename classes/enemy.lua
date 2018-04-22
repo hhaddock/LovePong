@@ -32,7 +32,12 @@ end
 function Enemy.followBall(self, dt, ballY)
     flux.update(dt)
 
-    flux.to(self, 1.7, {x = self.x, y = ballY})
+    flux.to(self, 1.7, {x = self.x, y = ballY - (self.height / 2)})
+end
+
+function Enemy.goToCenter(self, dt)
+    flux.update(dt)
+    flux.to(self, 1.7, { x = self.x, y = self.originY })
 end
 
 function Enemy.reset(self)

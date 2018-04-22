@@ -36,7 +36,11 @@ function Game.update(self, dt)
 
   if not self.paused then
     self.enemy.update(self.enemy, dt)
-    self.enemy.followBall(self.enemy, dt, self.ball.y)
+    if self.ball.isMovingToAI(self.ball) then
+      self.enemy.followBall(self.enemy, dt, self.ball.y)
+    else
+      self.enemy.goToCenter(self.enemy, dt)
+    end
     self.ball.update(self.ball, dt)
     self.handleBallWorldCollisions(self)
     self.ball.handlePaddleCollisions(self.ball, self.player)
@@ -72,6 +76,10 @@ function Game.draw(self)
 
   --Draw FPS Counter
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 580)
+
+  if self.paused then
+    love.graphics.print("Press 'SPACE' to start", (self.gameWidth / 2) - 50, (self.gameHeight / 2) - 20)
+  end
 end
 
 function Game.handlePaddleWorldCollisions(self)
@@ -95,6 +103,7 @@ end
 function Game.handleBallWorldCollisions(self)
   for shape, delta in pairs(HC.collisions(self.ball.collider)) do
     if self.ball.collider:collidesWith(self.worldBounds.left) then
+      self.player.reset(self.player)
       self.ball.reset(self.ball)
       self.enemy.reset(self.enemy)
       self.playerScore = self.playerScore + 1

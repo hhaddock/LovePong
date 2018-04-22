@@ -73,3 +73,12 @@ function Ball.handlePaddleCollisions(self, paddle)
     end
   end
 end
+
+function Ball.isMovingToAI(self)
+  if self.x > (love.graphics:getWidth() / 2) - 100 and self.speedX > 0 then
+    return true
+  end
+  return false
+end
+
+
