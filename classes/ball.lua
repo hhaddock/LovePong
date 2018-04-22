@@ -8,6 +8,7 @@ function Ball.new(self)
 
     self.speed = 200
     self.angle = math.rad(-135)
+    --self.angle = math.rad(-300)
 
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
@@ -25,8 +26,6 @@ function Ball.new(self)
 end
 
 function Ball.update(self, dt)
-    --print("speedx = "..self.speedX)
-
     self.speedX = self.speed * math.cos(self.angle)
     self.speedY = self.speed * math.sin(self.angle)
 
@@ -50,24 +49,26 @@ function Ball.reset(self)
   self.y = self.originY
   self.speedX = 0
   self.speedY = 0
+  self.angle = math.random(math.rad(-135), math.rad(45))
   self.collider = HC.circle(self.x + self.width / 2, self.y + self.height / 2, self.width/2)
 end
 
 function Ball.handlePaddleCollisions(self, paddle)
+  --print("SpeedX: "..self.speedX.." SpeedY: "..self.speedY.." Angle: "..self.angle)
   if self.x < love.graphics:getWidth() / 2 and self.speedX < 0 then
-    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x < paddle.x + paddle.width then
+    if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x + self.width > paddle.x and self.x < paddle.x + paddle.width then
       if self.speedY < 0 then
-        self.angle = self.angle / -3
+        self.angle = self.angle / -4
       else
-        self.angle = self.angle / 3
+        self.angle = self.angle / 4
       end
     end
   elseif self.x > love.graphics:getWidth() / 2 and self.speedX > 0 then
     if self.y + self.height > paddle.y and self.y < paddle.y + paddle.height and self.x + self.width > paddle.x and self.x < paddle.x then
       if self.speedY < 0 then
-        self.angle = self.angle / 3
+        self.angle = self.angle * 4
       else
-        self.angle = self.angle / -3
+        self.angle = self.angle * -4
       end
     end
   end

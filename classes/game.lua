@@ -2,6 +2,7 @@ Game = Object:extend()
 HC = require "libraries..HC"
 
 require "classes..player"
+require "classes..enemy"
 require "classes..ball"
 
 function Game.new(self)
@@ -11,7 +12,9 @@ function Game.new(self)
   self.paused = true
 
   --Init player and ball
-  self.player = Player(10, self.gameWidth / 2)
+  self.player = Player(10, (self.gameHeight / 2) - 50)
+  --self.enemy = Enemy(500, 200)
+  self.enemy = Enemy(self.gameWidth - 35, (self.gameHeight / 2) - 50)
   self.ball = Ball()
 
   --Score vars
@@ -30,10 +33,15 @@ end
 function Game.update(self, dt)
   --Update the position of player and ball
   self.player.update(self.player, dt)
+
+  self.enemy.update(self.enemy, dt)
+  self.enemy.followBall(self.enemy, dt, self.ball.y)
+
   if not self.paused then
     self.ball.update(self.ball, dt)
     self.handleBallWorldCollisions(self)
     self.ball.handlePaddleCollisions(self.ball, self.player)
+    self.ball.handlePaddleCollisions(self.ball, self.enemy)
   end
 
   --Check for world collisions with the player
@@ -51,6 +59,7 @@ function Game.draw(self)
   --Draw player
   self.player.draw(self.player)
   self.ball.draw(self.ball)
+  self.enemy.draw(self.enemy)
 
   --Draw world bounds
   self.worldBounds.top:draw('line')
@@ -74,6 +83,14 @@ function Game.handlePaddleWorldCollisions(self)
       self.player.y = love.graphics:getHeight() - self.player.img:getHeight() - 3
     end
   end
+
+  --[[for shape, delta in pairs(HC.collisions(self.enemy.collider)) do
+    if self.enemy.collider:collidesWith(self.worldBounds.top) then
+      self.enemy.y = 3
+    elseif self.enemy.collider:collidesWith(self.worldBounds.bottom) then
+      self.enemy.y = love.graphics:getHeight() - self.player.img:getHeight() - 3
+    end
+  end--]]
 end
 
 function Game.handleBallWorldCollisions(self)
